@@ -11,32 +11,32 @@
     <audio id="sound" src="./assets/sound/background.mp3" autoplay loop></audio>
     <div class="header">
         <div class="time">
-            <img src="./assets/images/time.png"/>
+            <img src="./assets/images/time.png" alt=""/>
             <span id="timer">0</span>
         </div>
         <div class="score">
-            <img src="./assets/images/score.png"/>
-            <span>456</span>
+            <img src="./assets/images/score.png" alt=""/>
+            <span id="score">0</span>
         </div>
         <div class="fuel">
             <div class="fuel-inside"></div>
-            <img src="./assets/images/fuel.png"/>
+            <img src="./assets/images/fuel.png" alt=""/>
             <span id="fuel-count">15</span>
         </div>
     </div>
     <div class="footer">
         <div class="fd">
-            <img src="./assets/images/fd.png"/>
+            <img src="./assets/images/fd.png" alt=""/>
         </div>
         <div class="fp">
-            <img src="./assets/images/fp.png"/>
+            <img src="./assets/images/fp.png" alt=""/>
         </div>
         <div class="status">
-            <img id="status" src="./assets/images/stop.png"/>
+            <img id="status" src="./assets/images/stop.png" alt=""/>
         </div>
     </div>
     <div class="sound">
-        <img src="./assets/images/sound.png"/>
+        <img src="./assets/images/sound.png" alt=""/>
     </div>
     <div class="mask start-page">
         <div class="grid-container">
@@ -48,30 +48,35 @@
     <div class="game-board" style="display: none">
         <div class="spaceship" id="player" style="display: none">
             <div class="spaceship-head"></div>
-            <img src="./assets/images/spaceship.png"/>
+            <img src="./assets/images/spaceship.png" alt=""/>
         </div>
         <div class="space-planet">
-            <img
-                    src="./assets/images/planets/002-travel.png"
-                    style="left: 900px"
+            <img class="space-small-planet"
+                 src="./assets/images/planets/002-travel.png"
+                 style="left: 900px" alt=""
             />
-            <img
-                    src="./assets/images/planets/006-mars.png"
-                    style="top: 250px; left: 840px"
+            <img class="space-big-planet"
+                 src="./assets/images/planets/006-mars.png"
+                 style="top: 250px; left: 540px" alt=""
             />
-            <img
-                    src="./assets/images/planets/012-jupiter.png"
-                    style="top: 100px; left: 780px"
+            <img class="space-small-planet"
+                 src="./assets/images/planets/012-jupiter.png"
+                 style="top: 150px; left: 990px" alt=""
             />
-            <img
-                    src="./assets/images/planets/002-travel.png"
-                    style="top: 320px; left: 750px"
+            <img class="space-big-planet"
+                 src="./assets/images/planets/002-travel.png"
+                 style="top: 420px; left: 950px" alt=""
+            />
+            <img class="space-small-planet"
+                 src="./assets/images/planets/012-jupiter.png"
+                 style="top: 100px; left: 480px" alt=""
             />
         </div>
         <div class="space-elements"></div>
     </div>
 </div>
 
+<script src="./assets/bullet.js"></script>
 <script src="./assets/game.js"></script>
 <script src="./assets/player.js"></script>
 <script src="./assets/main.js"></script>

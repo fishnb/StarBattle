@@ -9,10 +9,13 @@ const fuel_count = document.querySelector("#fuel-count");
 const space_elements = document.querySelector(".space-elements");
 const space_planet = document.querySelector(".space-planet");
 const game_board = document.querySelector(".game-board");
-
+const sound_element = document.querySelector(".sound");
+const score_element = document.querySelector("#score")
+const bullet = new Bullet()
+bullet.initQueue()
 const game = new Game(main_dom, space_elements, {maxW, maxH});
 const player = new Player(main_dom, player_dom, 2, {maxW, maxH});
-const sound_element = document.querySelector("#sound")
+const sound_tag = document.querySelector("#sound")
 let sound = false;
 
 const asteroids_pic = [
@@ -45,6 +48,24 @@ window.addEventListener("keydown", function (e) {
         player.move("down", 20);
     }
 });
+
+window.addEventListener("keyup", function (e) {
+    e.preventDefault();
+    let {code} = e;
+
+    if (code === "Space") {
+        player.shoot()
+        console.log('space')
+    }
+
+    if (code === "KeyP") {
+        if (game.status === "start") {
+            stopGame();
+        } else if (game.status === "stop") {
+            continueGame();
+        }
+    }
+})
 
 let timer;
 let time = 0;
@@ -104,22 +125,21 @@ document.querySelector(".status").addEventListener("click", () => {
 
 // 声音控制
 document.querySelector(".sound").addEventListener("click", () => {
-    const element = document.querySelector(".sound");
     if (sound) {
-        element.style.animationPlayState = "paused";
+        sound_element.style.animationPlayState = "paused";
         sound = false
-        sound_element.pause()
+        sound_tag.pause()
     } else {
-        element.style.animationPlayState = "running";
+        sound_element.style.animationPlayState = "running";
         sound = true
-        sound_element.play()
+        sound_tag.play()
     }
 });
 
 window.onload = function () {
     const element = document.querySelector(".sound");
     if (sound) {
-        sound_element.play();
+        sound_tag.play();
     } else {
         element.style.animationPlayState = "paused";
     }
@@ -129,95 +149,67 @@ window.onload = function () {
  * 开始游戏
  */
 function onStart() {
-    // 隐藏遮罩层
-    mask.style.display = "none";
-    // 展示顶部状态栏
-    header.style.display = "grid";
-    footer.style.display = "grid";
-    game_board.style.display = "block";
-    player_dom.style.display = "block";
-    fuel_element.style.width = parseInt(player.fuel) * 6 + 'px'
+    try {
+        if (game.status !== "end") return;
+        // 隐藏遮罩层
+        mask.style.display = "none";
+        // 展示顶部状态栏
+        header.style.display = "grid";
+        footer.style.display = "grid";
+        game_board.style.display = "block";
+        player_dom.style.display = "block";
+        fuel_element.style.width = parseInt(player.fuel) * 6 + 'px'
 
-    game.on("start", () => {
-        player.setPosition();
-    });
+        game.on("start", () => {
+            player.fuel = 15
+            fuel_element.style.width = parseInt(player.fuel) * 6 + 'px'
+            fuel_count.innerHTML = player.fuel
+            player.setPosition();
+        });
 
-    player.on("fuel", ({type, reduce, add, fuel}) => {
-        console.log(type, reduce, fuel)
-        if (fuel <= 0) {
-            player.die()
+        player.on("fuel", ({fuel}) => {
+            if (fuel <= 0) {
+                player.die()
+            }
+            fuel_element.style.width = parseInt(fuel) * 6 + 'px'
+            fuel_count.innerHTML = fuel
+        });
+
+        player.on("score", ({score}) => {
+            score_element.innerHTML = score
+        })
+
+        player.on("die", () => {
+            endGame();
+        })
+
+
+        game.start();
+
+        for (let i = 0; i < 3; i++) {
+            game.create_asteroid(asteroids_pic);
         }
-        fuel_element.style.width = parseInt(fuel) * 6 + 'px'
-        fuel_count.innerHTML = fuel
-    });
 
-    player.on("collision", (data) => {
-        console.log(data)
-    })
+        for (let i = 0; i < 3; i++) {
+            game.create_enemy(asteroids_pic);
+        }
 
-    player.on("die", () => {
-        endGame();
-    })
+        sound_element.style.animationPlayState = "running";
+        sound = true
+        sound_tag.play()
 
-    console.log(game)
-    game.start();
-    for (let i = 0; i < 3; i++) {
-        game.create_asteroid(asteroids_pic);
+        startTimer();
+        game.status = "start";
+    } catch (e) {
+        console.log(e)
     }
-
-    for (let i = 0; i < 3; i++) {
-        game.create_enemy(asteroids_pic);
-    }
-
-    const reduce_timer = setInterval(() => {
-        if (game.status === "stop") return;
-        if (this.fuel <= 0 || game.status === "end") clearInterval(reduce_timer);
-        player.reduce_fuel(1)
-    }, 1000)
-
-    const create_fuel = setInterval(() => {
-        const fuel_count = document.querySelectorAll(".space-elements .fuel");
-        if (fuel_count.length >= 3) return;
-        if (game.status === "stop") return;
-        if (this.fuel <= 0 || game.status === "end") clearInterval(create_fuel);
-        game.create_fuel()
-    }, 2000)
-
-    // const check_element = setInterval(() => {
-    //     if (game.status === "stop") return;
-    //     if (game.status === "end") clearInterval(check_element)
-    //     const elements = document.querySelectorAll(".space-elements")
-    //     for (let i = 0; i < elements.length; i++) {
-    //         let child = elements[i];
-    //
-    //         if (child.className.includes("fuel")) {
-    //             if (child.style.top.split("px")[0] >= 500) child.remove()
-    //         }
-    //
-    //         if (child.className.includes("asteroid")) {
-    //             if (child.style.left.split("px")[0] <= -20) {
-    //                 child.remove()
-    //                 game.create_asteroid(asteroids_pic)
-    //             }
-    //         }
-    //
-    //         if (child.className.includes("enemy")) {
-    //             if (child.style.left.split("px")[0] <= -20) {
-    //                 child.remove()
-    //                 game.create_enemy()
-    //             }
-    //         }
-    //     }
-    // }, 10)
-
-    startTimer();
-    game.start = "start";
 }
 
 /**
  * 停止游戏
  */
 function stopGame() {
+    game.status = "stop";
     stopTimer();
 
     for (let i = 0; i < space_elements.children.length; i++) {
@@ -232,14 +224,19 @@ function stopGame() {
         child.style.animationPlayState = "paused";
     }
 
+
+    sound_element.style.animationPlayState = "paused";
+    sound = false
+    sound_tag.pause()
+
     document.querySelector("#status").src = "./assets/images/play.png";
-    game.status = "stop";
 }
 
 /**
  * 结束游戏
  */
 function endGame() {
+    game.status = "end"
     for (let i = 0; i < space_elements.children.length; i++) {
         // 获取当前元素
         let child = space_elements.children[i];
@@ -250,7 +247,6 @@ function endGame() {
     footer.style.display = "none";
     game_board.style.display = "none";
     player_dom.style.display = "none";
-    game.status = "end"
 }
 
 /**
@@ -270,6 +266,10 @@ function continueGame() {
         let child = space_planet.children[i];
         child.style.animationPlayState = "running";
     }
+
+    sound_element.style.animationPlayState = "running";
+    sound = true
+    sound_tag.play()
 
     document.querySelector("#status").src = "./assets/images/stop.png";
     game.status = "start";

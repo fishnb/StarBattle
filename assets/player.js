@@ -1,14 +1,18 @@
 class Player {
     /**
      *
+     * @param main
      * @param {HTMLElement} player 玩家元素
      * @param {number} speed 移动速度
+     * @param maxW
+     * @param maxH
      */
     constructor(main, player, speed, {maxW, maxH}) {
         this.main = main;
         this.player = player;
         this.speed = speed;
         this.fuel = 15;
+        this.score = 0;
         this.setTimer = false
 
         this.maxW = maxW;
@@ -49,11 +53,19 @@ class Player {
     }
 
     getWidth() {
-        return parseInt(this.player.style.width.split('px')[0]);
+        return 100;
     }
 
     getHeight() {
-        return parseInt(this.player.style.height.split('px')[0]);
+        return 50;
+    }
+
+    /**
+     * 修改分数
+     */
+    addScore(count) {
+        this.score += count;
+        this.triggerEvent("score", {score: this.score, add: count});
     }
 
     /**
@@ -62,6 +74,8 @@ class Player {
     setPosition() {
         this.top = this.maxH / 2;
         this.left = 0;
+        this.score = 0;
+        this.fuel = 15
         this.move("right", 10);
     }
 
@@ -69,6 +83,10 @@ class Player {
         this.player.style.display = "none";
         this.fuel = 0;
         this.triggerEvent("die", {fuel: this.fuel});
+    }
+
+    shoot() {
+        bullet.shoot(this.getLeft() + this.getWidth(), this.getTop() + 15, "player")
     }
 
     /**
@@ -102,7 +120,7 @@ class Player {
      */
     move(direction, length) {
         if (length <= 0) return;
-        if (game.status == "stop") return;
+        if (game.status === "stop") return;
 
         const animate = (remainingLength) => {
             if (remainingLength <= 0) return;
@@ -153,6 +171,9 @@ class Player {
                                 child.className.includes("asteroid")
                             ) {
                                 this.reduce_fuel(15)
+                                child.remove()
+                                if (child.className.includes("asteroid")) game.create_asteroid(asteroids_pic)
+                                if (child.className.includes("enemy")) game.create_enemy()
                             }
 
                             // 燃料
@@ -176,22 +197,22 @@ class Player {
     /**
      * 物体碰撞
      */
-   impact(item) {
-    const itemRect = item.getBoundingClientRect();
-    const thisRect = this.player.getBoundingClientRect();
+    impact(item) {
+        const itemRect = item.getBoundingClientRect();
+        const thisRect = this.player.getBoundingClientRect();
 
-    const itemLeft = itemRect.left;
-    const itemRight = itemRect.right;
-    const itemTop = itemRect.top;
-    const itemBottom = itemRect.bottom;
+        const itemLeft = itemRect.left;
+        const itemRight = itemRect.right;
+        const itemTop = itemRect.top;
+        const itemBottom = itemRect.bottom;
 
-    const thisLeft = thisRect.left;
-    const thisRight = thisRect.right;
-    const thisTop = thisRect.top;
-    const thisBottom = thisRect.bottom;
+        const thisLeft = thisRect.left;
+        const thisRight = thisRect.right;
+        const thisTop = thisRect.top;
+        const thisBottom = thisRect.bottom;
 
-    return thisLeft < itemRight && itemLeft < thisRight &&
-           thisTop < itemBottom && itemTop < thisBottom;
-}
+        return thisLeft < itemRight && itemLeft < thisRight &&
+            thisTop < itemBottom && itemTop < thisBottom;
+    }
 
 }
