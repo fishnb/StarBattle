@@ -11,17 +11,20 @@
     <audio id="sound" src="./assets/sound/background.mp3" autoplay loop></audio>
     <div class="header">
         <div class="time">
-            <img src="./assets/images/time.png" alt=""/>
+            <img src="./assets/images/time.png" alt="time"/>
             <span id="timer">0</span>
         </div>
         <div class="score">
-            <img src="./assets/images/score.png" alt=""/>
+            <img src="./assets/images/score.png" alt="score"/>
             <span id="score">0</span>
         </div>
         <div class="fuel">
             <div class="fuel-inside"></div>
-            <img src="./assets/images/fuel.png" alt=""/>
-            <span id="fuel-count">15</span>
+            <img src="./assets/images/fuel.png" alt="fuel"/>
+            <span id="fuel">15</span>
+        </div>
+        <div class="logo">
+            <img src="./assets/images/logo.png" alt="logo"/>
         </div>
     </div>
     <div class="footer">
@@ -36,49 +39,26 @@
         </div>
     </div>
     <div class="sound">
-        <img src="./assets/images/sound.png" alt=""/>
+        <img src="./assets/images/music.png" alt="music"/>
     </div>
-    <div class="mask start-page">
-        <div class="grid-container">
-            <img src="./assets/images/logo-02.png" alt="Logo" class="logo"/>
-            <button onclick="onStart()">Start Game</button>
-            <button onclick="onRank()">Rank</button>
-        </div>
-    </div>
-    <div class="game-board" style="display: none">
-        <div class="spaceship" id="player" style="display: none">
-            <div class="spaceship-head"></div>
-            <img src="./assets/images/spaceship.png" alt=""/>
-        </div>
-        <div class="space-planet">
-            <img class="space-small-planet"
-                 src="./assets/images/planets/002-travel.png"
-                 style="left: 900px" alt=""
-            />
-            <img class="space-big-planet"
-                 src="./assets/images/planets/006-mars.png"
-                 style="top: 250px; left: 540px" alt=""
-            />
-            <img class="space-small-planet"
-                 src="./assets/images/planets/012-jupiter.png"
-                 style="top: 150px; left: 990px" alt=""
-            />
-            <img class="space-big-planet"
-                 src="./assets/images/planets/002-travel.png"
-                 style="top: 420px; left: 950px" alt=""
-            />
-            <img class="space-small-planet"
-                 src="./assets/images/planets/012-jupiter.png"
-                 style="top: 100px; left: 480px" alt=""
-            />
-        </div>
-        <div class="space-elements"></div>
+    <div class="game-board">
+        <img src="assets/images/planets/002-travel.png" alt="plane" class="planet"
+             style="width: 350px; top: 100px; z-index: 5; animation: move-left 11s infinite linear"/>
+        <img src="assets/images/planets/006-mars.png" alt="plane" class="planet"
+             style="width: 300px; top: 0px; z-index: 4; animation: move-left 14s infinite linear"/>
+        <img src="assets/images/planets/001-global.png" alt="plane" class="planet"
+             style="width: 250px; top: 300px; z-index: 3; animation: move-left 12s infinite linear"/>
+        <img src="assets/images/planets/002-travel.png" alt="plane" class="planet"
+             style="width: 200px; top: 250px; z-index: 2; animation: move-left 14s infinite linear"/>
+        <img src="assets/images/planets/012-jupiter.png" alt="plane" class="planet"
+             style="width: 100px; top: 100px; z-index: 1; animation: move-left 16s infinite linear"/>
     </div>
 </div>
 
-<script src="./assets/bullet.js"></script>
-<script src="./assets/game.js"></script>
-<script src="./assets/player.js"></script>
-<script src="./assets/main.js"></script>
+<script src="assets/jquery-3.7.1.min.js"></script>
+<script src="assets/Game.js"></script>
+<script src="assets/Npc.js"></script>
+<script src="assets/Player.js"></script>
+<script src="assets/main.js"></script>
 </body>
 </html>

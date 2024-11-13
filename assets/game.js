@@ -1,123 +1,134 @@
 class Game {
-    /**
-     *
-     * @param {HTMLElement} main
-     * @param {HTMLElement} space
-     */
-    constructor(main, space, {maxW, maxH}) {
-        this.main = main;
-        this.space = space;
-        this.status = "end";
-        this.maxW = maxW;
-        this.maxH = maxH;
-        this.listeners = {}; // 事件存储
+    constructor() {
+        this.status = "end"
+        this.muted = true
+        this.font_size = 18
+        this.npc = {}
+        this.resetGameData()
     }
 
     /**
-     * 事件监听器
-     * @param {string} name 事件名称
-     * @param {Function} callback 回调函数
+     * 开始游戏
      */
-    on(name, callback) {
-        if (!this.listeners[name]) {
-            this.listeners[name] = [];
-        }
-        this.listeners[name].push(callback);
-    }
-
-    /**
-     * 事件触发器
-     * @param {string} name 事件名称
-     * @param {Object} data 事件数据
-     */
-    triggerEvent(name, data) {
-        const callbacks = this.listeners[name];
-        if (callbacks) {
-            callbacks.forEach((callback) => callback(data));
-        }
-    }
-
     start() {
-        this.status = "start";
-        this.triggerEvent("start", {});
-    }
-
-    stop() {
-        this.status = "stop";
-        this.triggerEvent("stop", {});
-    }
-
-    end() {
-        this.status = "end";
-        this.triggerEvent("end", {});
+        gameData.player = new Player()
+        this.timer()
     }
 
     /**
-     * 随机生成一个索引值
-     *
-     * @param {number} maxLength
-     * @returns {number}
+     * 结束游戏
      */
-    random_index(maxLength) {
-        return Math.floor(Math.random() * maxLength);
+    over() {
     }
 
     /**
-     * 随机生成一个可视范围内的坐标
-     *
-     * @returns {{x: number, y: number}}
+     * 停止游戏
      */
-    random_coordinate() {
-        const x = Math.floor(Math.random() * (maxW - 100) + 10);
-        const y = Math.floor(Math.random() * (maxH - 100) + 10);
-        return {x, y};
+    pause() {
     }
 
     /**
-     * 创建一个星球
+     * 继续游戏
      */
-    create_planet(pics) {
-        const planet = document.createElement("img");
-        planet.classList.add("planet");
-        planet.src = pics[this.random_index(pics.length)];
-        planet.style.top = this.random_coordinate().y + "px";
-        planet.style.left = this.random_coordinate().x + "px";
-        this.space.append(planet);
+    continue() {
     }
 
     /**
-     * 创建一个陨石
+     * 重置游戏数据
      */
-    create_asteroid(pics) {
-        const asteroid = document.createElement("img");
-        asteroid.classList.add("asteroid");
-        asteroid.src = pics[this.random_index(pics.length)];
-        asteroid.style.top = this.random_coordinate().y + "px";
-        asteroid.style.left = this.random_coordinate().x + "px";
-        this.space.append(asteroid);
+    resetGameData() {
+        gameData = {
+            player: '',
+            score: 0,
+            time: 0,
+            fuel: 15,
+            name: "",
+        };
+        this.muted = true;
+        this.npc = {}
     }
 
     /**
-     * 创建敌人
+     * 静音
      */
-    create_enemy() {
-        const enemy = document.createElement("img");
-        enemy.classList.add("enemy");
-        enemy.src = "./assets/images/enemy.png";
-        enemy.style.top = this.random_coordinate().y + "px";
-        enemy.style.left = this.random_coordinate().x + "px";
-        this.space.append(enemy);
+    mute() {
+        const audio = $("audio")[0]
+        const sound = $(".sound img")[0]
+        if (!this.muted) {
+            // 静音
+            sound.style.animationPlayState = "paused"
+            audio.volume = 0
+            this.muted = true
+        } else {
+            // 开启
+            sound.style.animationPlayState = "running"
+            audio.volume = 1
+            this.muted = false
+        }
     }
 
     /**
-     * 创建·燃料
+     * 字号
      */
-    create_fuel() {
-        const fuel = document.createElement("img");
-        fuel.classList.add("fuel");
-        fuel.src = "./assets/images/fuel.png";
-        fuel.style.top = this.random_coordinate().y + "px";
-        fuel.style.left = this.random_coordinate().x + "px";
-        this.space.append(fuel)
+    fontSize(type) {
+        const font = $(".header span")
+        if (type === "add") {
+            this.font_size += 2;
+        }
+
+        if (type === "reduce") {
+            this.font_size -= 2;
+        }
+
+        if (this.font_size > 22 || this.font_size < 14) this.font_size = 18
+        for (let i = 0; i < font.length; i++) {
+            font[i].style.fontSize = this.font_size + "px"
+        }
+    }
+
+    timer() {
+        let randomNpc = Math.floor(Math.random() * 10);
+        const npc_create = setInterval(() => {
+            if (this.status === "over") clearInterval(npc_create)
+            if (this.status === "pause") return false;
+            if (this.npc.length > 15) return false;
+
+            randomNpc = Math.floor(Math.random() * 4);
+            if (randomNpc === 0) {
+                new Asteroid();
+            }
+            if (randomNpc === 1) {
+                new Fuel();
+            }
+            if (randomNpc === 2) {
+                new Enemy();
+            }
+            if (randomNpc === 3) {
+                new Friend();
+            }
+            gameData.fuel--
+            gameData.time++
+        }, 1000)
+
+        const check = setInterval(() => {
+            // if (game.status === "over") clearInterval(npc_create)
+            // if (game.status === "pause") return false;
+            // if (this.gameData.fuel <= 0) {
+            //     this.over()
+            //     return;
+            // }
+
+            $("#fuel").html(gameData.fuel);
+            $("#timer").html(gameData.time);
+            $("#core").html(gameData.score);
+            $(".fuel-inside").css({width: gameData.fuel * 6});
+
+            $.each(this.npc, () => {
+                if (this.dom.is('.player-bullet')) {
+                    let bullet = this;
+                    console.log(bullet)
+                }
+            })
+        }, 15)
     }
 }
