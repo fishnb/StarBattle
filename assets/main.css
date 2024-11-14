@@ -9,18 +9,41 @@
 }
 
 :root {
-    --main-color: rgb(219, 63, 61);
+    --main-color: #db3f3d;
 }
 
-.mask {
-    display: none;
+button {
+    background-color: var(--main-color);
+    width: 200px;
+    color: #fff;
+    border: unset;
+    border-radius: 3px;
+    font-family: armata, sans-serif;
+    font-weight: 500;
+    padding: 10px 20px;
+    font-size: 16px;
 }
 
-.main {
-    background-image: url("images/background.jpg");
+button:hover {
+    background-color: #f19e0d;
 }
 
-.main, .game-board {
+button:before {
+    content: '';
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    opacity: 0.8;
+    background: #fff;
+    border-radius: 50%;
+    transform: scale(0);
+}
+
+button:active:before {
+    animation: button-active 0.5s forwards;
+}
+
+.main, .frame, .game, .game-board {
     height: 600px;
     width: 960px;
     overflow: hidden;
@@ -28,6 +51,126 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: armata, sans-serif;
+}
+
+.frame .home {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    background-image: url("images/background.jpg");
+}
+
+.frame .home {
+    .left {
+        flex: 0 0 40%;
+        box-sizing: border-box;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .right {
+        display: flex;
+        flex: 0 0 60%;
+        box-sizing: border-box;
+        justify-content: center;
+    }
+
+    .description {
+        margin-top: 10%;
+        width: 80%;
+        color: #fff;
+        font-family: armata, sans-serif;
+        font-size: 15px;
+    }
+
+    .description p {
+        padding: 2px;
+    }
+
+    .start {
+        text-align: center;
+    }
+
+    .start .logo {
+        width: 300px;
+        margin-bottom: 40px;
+    }
+}
+
+.frame .over {
+    box-sizing: border-box;
+    box-shadow: 0 0 100px 20px rgba(0, 0, 0, 0.5) inset;
+    background: #368fd8;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.frame .over {
+    .submit, .rank {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        width: 40%;
+        position: absolute;
+        top: 30%;
+    }
+
+    .submit #input-name {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .rank {
+        top: 20%;
+        color: #fff;
+    }
+
+    .rank-list {
+        margin: 40px;
+    }
+
+    .rank-list table {
+        width: 615px;
+    }
+
+    .rank-list-item {
+        overflow-y: auto;
+        height: 220px;
+    }
+
+    .rank button {
+        margin-top: 20px;
+    }
+
+    .rank thead th {
+        padding-left: 100px;
+        font-weight: bold;
+    }
+
+    .rank th {
+        padding-left: 100px;
+        font-weight: 500;
+    }
+}
+
+.game {
+    background-image: url("images/background.jpg");
 }
 
 .header, .footer {
@@ -53,7 +196,7 @@
 .header {
     div {
         padding: 10px;
-        margin: 10px;
+        margin: 10px 40px 10px 10px;
     }
 
     div span {
@@ -83,7 +226,7 @@
 
     .fuel span {
         position: relative;
-        left: 120px;
+        left: 110px;
         top: -44px;
     }
 
@@ -145,7 +288,7 @@
     position: relative;
     width: 100px;
     height: 60px;
-    z-index: 10;
+    z-index: 11;
     animation: plane-running 1s linear infinite;
 }
 
@@ -158,13 +301,13 @@
     .enemy {
         height: 80px;
         width: 80px;
-        background: url("images/enemy.png") no-repeat center / contain;
+        background: url("images/enemy.png");
     }
 
     .friend {
         height: 80px;
         width: 80px;
-        background: url("images/friend.png") no-repeat center / contain;
+        background: url("images/friend.png");
     }
 
     .asteroid {
@@ -262,5 +405,16 @@
 @keyframes move-down {
     to {
         transform: translateY(1600px);
+    }
+}
+
+@keyframes button-active {
+    50% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    to {
+        transform: scale(1);
+        opacity: 0;
     }
 }

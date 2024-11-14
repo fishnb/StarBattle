@@ -8,50 +8,117 @@
 </head>
 <body>
 <div class="main">
-    <audio id="sound" src="./assets/sound/background.mp3" autoplay loop></audio>
-    <div class="header">
-        <div class="time">
-            <img src="./assets/images/time.png" alt="time"/>
-            <span id="timer">0</span>
+    <div class="frame">
+        <div class="home" style="display: none">
+            <div class="left">
+                <div class="start">
+                    <img class="logo" src="assets/images/logo.png" alt="logo"/>
+                    <button id="start">Start Game</button>
+                </div>
+            </div>
+            <div class="right">
+                <div class="description">
+                    <p>How to Play Star Battle.</p>
+                    <p>1. Move the spaceship using the sensible areas in the screen;</p>
+                    <p>2. The timer present the time lapsed;</p>
+                    <p>3. The fuel counter show the remain fuel;</p>
+                    <p>4. During the flight, the spaceship needs to destroy the asteroids and
+                        enemy spaceships that are presented in the space;
+                    </p>
+                    <p>5. You can shoot pressing Space Bar;</p>
+                    <p>6. If the spaceship hits a asteroid or another spaceship,
+                        you lose 15 points of fuel;
+                    </p>
+                    <p>7. Enemy spaceship needs 1 shot to be destroyed, you will get 5
+                        points for each enemy destroyed;
+                    </p>
+                    <p>8. Asteroid needs 2 shots to be destroyed, you will get 10 points
+                        for each asteroid destroyed;
+                    </p>
+                    <p>9. If you destroy a friendly spaceship, you lose 10 points;</p>
+                    <p>10. During the flight, the spaceship needs to collect fuel in the space;</p>
+                    <p>11. You can pause the game clicking in a button pause, or pressing
+                        the letter "p";
+                    </p>
+                    <p>12. Go beyond all limits;</p>
+                    <p>Battle in Space with Star Battle Championship...</p>
+                </div>
+            </div>
         </div>
-        <div class="score">
-            <img src="./assets/images/score.png" alt="score"/>
-            <span id="score">0</span>
-        </div>
-        <div class="fuel">
-            <div class="fuel-inside"></div>
-            <img src="./assets/images/fuel.png" alt="fuel"/>
-            <span id="fuel">15</span>
-        </div>
-        <div class="logo">
-            <img src="./assets/images/logo.png" alt="logo"/>
+        <div class="over">
+            <div class="submit" style="display: none">
+                <input type="text" id="input-name" placeholder="Name"/>
+                <button class="submit-button" id="submit-name">Continue</button>
+            </div>
+            <div class="rank">
+                <h2>Rank Panel</h2>
+                <div class="rank-list">
+                    <table>
+                        <thead class="rank-list-header" style="overflow: unset">
+                        <tr>
+                            <th>Position</th>
+                            <th>Name</th>
+                            <th>Time</th>
+                            <th>Score</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="rank-list-item">
+                        <table>
+                            <tbody class="rank-list-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <button id="continue-game">Start Game</button>
+            </div>
         </div>
     </div>
-    <div class="footer">
-        <div class="fd">
-            <img src="./assets/images/fd.png" alt=""/>
+    <div class="game" style="display: none">
+        <audio id="sound" src="./assets/sound/background.mp3" autoplay loop></audio>
+        <div class="header">
+            <div class="time">
+                <img src="./assets/images/time.png" alt="time"/>
+                <span id="timer">0</span>
+            </div>
+            <div class="score">
+                <img src="./assets/images/score.png" alt="score"/>
+                <span id="score">0</span>
+            </div>
+            <div class="fuel">
+                <div class="fuel-inside"></div>
+                <img src="./assets/images/fuel.png" alt="fuel"/>
+                <span id="fuel">15</span>
+            </div>
+            <div class="logo">
+                <img src="./assets/images/logo.png" alt="logo"/>
+            </div>
         </div>
-        <div class="fp">
-            <img src="./assets/images/fp.png" alt=""/>
+        <div class="footer">
+            <div class="fd">
+                <img src="./assets/images/fd.png" alt=""/>
+            </div>
+            <div class="fp">
+                <img src="./assets/images/fp.png" alt=""/>
+            </div>
+            <div class="status">
+                <img id="status" src="./assets/images/stop.png" alt=""/>
+            </div>
         </div>
-        <div class="status">
-            <img id="status" src="./assets/images/stop.png" alt=""/>
+        <div class="sound">
+            <img src="./assets/images/music.png" alt="music"/>
         </div>
-    </div>
-    <div class="sound">
-        <img src="./assets/images/music.png" alt="music"/>
-    </div>
-    <div class="game-board">
-        <img src="assets/images/planets/002-travel.png" alt="plane" class="planet"
-             style="width: 350px; top: 100px; z-index: 5; animation: move-left 11s infinite linear"/>
-        <img src="assets/images/planets/006-mars.png" alt="plane" class="planet"
-             style="width: 300px; top: 0px; z-index: 4; animation: move-left 14s infinite linear"/>
-        <img src="assets/images/planets/001-global.png" alt="plane" class="planet"
-             style="width: 250px; top: 300px; z-index: 3; animation: move-left 12s infinite linear"/>
-        <img src="assets/images/planets/002-travel.png" alt="plane" class="planet"
-             style="width: 200px; top: 250px; z-index: 2; animation: move-left 14s infinite linear"/>
-        <img src="assets/images/planets/012-jupiter.png" alt="plane" class="planet"
-             style="width: 100px; top: 100px; z-index: 1; animation: move-left 16s infinite linear"/>
+        <div class="game-board">
+            <img src="assets/images/planets/002-travel.png" alt="plane" class="planet"
+                 style="width: 350px; top: 100px; z-index: 5; animation: move-left 11s infinite linear"/>
+            <img src="assets/images/planets/006-mars.png" alt="plane" class="planet"
+                 style="width: 300px; top: 0; z-index: 4; animation: move-left 14s infinite linear"/>
+            <img src="assets/images/planets/001-global.png" alt="plane" class="planet"
+                 style="width: 250px; top: 300px; z-index: 3; animation: move-left 12s infinite linear"/>
+            <img src="assets/images/planets/002-travel.png" alt="plane" class="planet"
+                 style="width: 200px; top: 250px; z-index: 2; animation: move-left 14s infinite linear"/>
+            <img src="assets/images/planets/012-jupiter.png" alt="plane" class="planet"
+                 style="width: 100px; top: 100px; z-index: 1; animation: move-left 16s infinite linear"/>
+        </div>
     </div>
 </div>
 
