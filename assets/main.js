@@ -65,6 +65,18 @@ $("#submit-name").click(() => {
     }
 })
 
+let updatedRankData= JSON.parse(localStorage.getItem("rank") ?? "[]");
+// 根据score和time降序排序
+updatedRankData.sort((a, b) => b.score - a.score || b.time - a.time);
+// 插入排序数据
+let i = 1;
+let rankHtml;
+updatedRankData.forEach((item) => {
+    rankHtml += `<tr><th>${i++}</th><th>${item.name}</th><th>${item.time}</th><th>${item.score}</th></tr>`
+})
+document.querySelector(".rank-list-body").innerHTML = rankHtml.slice(9)
+
+
 $("#continue-game").click(() => {
     $(".frame .over .submit").css("display", "none")
     $(".frame .over .rank").css("display", "none")
